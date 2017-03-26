@@ -23,6 +23,7 @@
 +(NSString* ) getStudentDBFileName;
 + (void)createStudentDBTable;
 + (void)insertTestValuesIntoDB;
++(void) insertRealValuesIntoDB:(NSString *) period withArray:(NSMutableArray *) arr;
 +(int) getNumberOfEntriesFromDB;
 + (int) getNumberOfEntriesFromDB:(NSString *) period;
 

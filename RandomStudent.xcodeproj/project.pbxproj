@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D1C33AE3DE3AD2F06E221ED /* libPods-RandomStudent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18028A84ABDA5A324EF8B4C0 /* libPods-RandomStudent.a */; };
 		CB1E52721E6ED67000E7939A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CB1E52711E6ED67000E7939A /* main.m */; };
 		CB1E52751E6ED67000E7939A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CB1E52741E6ED67000E7939A /* AppDelegate.m */; };
 		CB1E52781E6ED67000E7939A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB1E52771E6ED67000E7939A /* ViewController.m */; };
@@ -20,6 +21,7 @@
 		CB48202F1E6EFE4100720452 /* RS_Database.m in Sources */ = {isa = PBXBuildFile; fileRef = CB48202E1E6EFE4100720452 /* RS_Database.m */; };
 		CBC9FCDD1E70A2E9008BC5E7 /* SetupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBC9FCDC1E70A2E9008BC5E7 /* SetupViewController.xib */; };
 		CBC9FCDF1E70ACD8008BC5E7 /* icon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CBC9FCDE1E70ACD8008BC5E7 /* icon.jpg */; };
+		CBE57CFC1E88101100197239 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CBE57CFB1E88101100197239 /* icon.png */; };
 		CBF841A31E6F2DA80015011D /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBF841A11E6F2DA80015011D /* InfoViewController.m */; };
 		CBF841A41E6F2DA80015011D /* InfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBF841A21E6F2DA80015011D /* InfoViewController.xib */; };
 /* End PBXBuildFile section */
@@ -42,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		18028A84ABDA5A324EF8B4C0 /* libPods-RandomStudent.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RandomStudent.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		49FB7ECB8270C5FDCDE9C0C1 /* Pods-RandomStudent.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RandomStudent.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RandomStudent/Pods-RandomStudent.debug.xcconfig"; sourceTree = "<group>"; };
 		CB1E526D1E6ED67000E7939A /* RandomStudent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RandomStudent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB1E52711E6ED67000E7939A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CB1E52731E6ED67000E7939A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -65,9 +69,11 @@
 		CB48202E1E6EFE4100720452 /* RS_Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RS_Database.m; sourceTree = "<group>"; };
 		CBC9FCDC1E70A2E9008BC5E7 /* SetupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SetupViewController.xib; sourceTree = "<group>"; };
 		CBC9FCDE1E70ACD8008BC5E7 /* icon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = icon.jpg; path = ../../../icon.jpg; sourceTree = "<group>"; };
+		CBE57CFB1E88101100197239 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = ../../../icon.png; sourceTree = "<group>"; };
 		CBF841A01E6F2DA80015011D /* InfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoViewController.h; sourceTree = "<group>"; };
 		CBF841A11E6F2DA80015011D /* InfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoViewController.m; sourceTree = "<group>"; };
 		CBF841A21E6F2DA80015011D /* InfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoViewController.xib; sourceTree = "<group>"; };
+		FD2B5272545103F818712344 /* Pods-RandomStudent.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RandomStudent.release.xcconfig"; path = "Pods/Target Support Files/Pods-RandomStudent/Pods-RandomStudent.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +82,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB2A421E1E6F442D00A2DB71 /* libsqlite3.tbd in Frameworks */,
+				3D1C33AE3DE3AD2F06E221ED /* libPods-RandomStudent.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +103,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9799FCBEB124ACA42A0F3A1C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				49FB7ECB8270C5FDCDE9C0C1 /* Pods-RandomStudent.debug.xcconfig */,
+				FD2B5272545103F818712344 /* Pods-RandomStudent.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		CB1E52641E6ED67000E7939A = {
 			isa = PBXGroup;
 			children = (
@@ -112,6 +128,7 @@
 				CB1E52941E6ED67100E7939A /* RandomStudentUITests */,
 				CB1E526E1E6ED67000E7939A /* Products */,
 				CB2A421C1E6F442C00A2DB71 /* Frameworks */,
+				9799FCBEB124ACA42A0F3A1C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -128,6 +145,7 @@
 		CB1E526F1E6ED67000E7939A /* RandomStudent */ = {
 			isa = PBXGroup;
 			children = (
+				CBE57CFB1E88101100197239 /* icon.png */,
 				CBC9FCDE1E70ACD8008BC5E7 /* icon.jpg */,
 				CB1E52731E6ED67000E7939A /* AppDelegate.h */,
 				CB1E52741E6ED67000E7939A /* AppDelegate.m */,
@@ -172,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				CB2A421D1E6F442D00A2DB71 /* libsqlite3.tbd */,
+				18028A84ABDA5A324EF8B4C0 /* libPods-RandomStudent.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -183,9 +202,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CB1E529A1E6ED67100E7939A /* Build configuration list for PBXNativeTarget "RandomStudent" */;
 			buildPhases = (
+				611CE95DD4D119252AFA2C72 /* [CP] Check Pods Manifest.lock */,
 				CB1E52691E6ED67000E7939A /* Sources */,
 				CB1E526A1E6ED67000E7939A /* Frameworks */,
 				CB1E526B1E6ED67000E7939A /* Resources */,
+				64CE1DBB02583E4C3D4BAB83 /* [CP] Embed Pods Frameworks */,
+				36BBBDBE29DAFFA189D7B843 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -284,6 +306,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB1E52801E6ED67000E7939A /* LaunchScreen.storyboard in Resources */,
+				CBE57CFC1E88101100197239 /* icon.png in Resources */,
 				CBC9FCDD1E70A2E9008BC5E7 /* SetupViewController.xib in Resources */,
 				CB1E527D1E6ED67000E7939A /* Assets.xcassets in Resources */,
 				CBF841A41E6F2DA80015011D /* InfoViewController.xib in Resources */,
@@ -307,6 +330,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		36BBBDBE29DAFFA189D7B843 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RandomStudent/Pods-RandomStudent-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		611CE95DD4D119252AFA2C72 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		64CE1DBB02583E4C3D4BAB83 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RandomStudent/Pods-RandomStudent-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		CB1E52691E6ED67000E7939A /* Sources */ = {
@@ -465,29 +536,33 @@
 		};
 		CB1E529B1E6ED67100E7939A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 49FB7ECB8270C5FDCDE9C0C1 /* Pods-RandomStudent.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 74H383AMWA;
 				INFOPLIST_FILE = RandomStudent/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Me.RandomStudent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lapharcius.RandomStudent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
 		CB1E529C1E6ED67100E7939A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FD2B5272545103F818712344 /* Pods-RandomStudent.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = 74H383AMWA;
 				INFOPLIST_FILE = RandomStudent/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Me.RandomStudent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lapharcius.RandomStudent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

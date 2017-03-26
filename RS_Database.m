@@ -28,7 +28,7 @@
     //	[timeZoneNames count];
     // https://sheets.googleapis.com/v4/spreadsheets/spreadsheetId?&fields=sheets.properties
     
-    NSLog(@"Start - createStudentDBTable!");
+///    NSLog(@"Start - createStudentDBTable!");
     char *error;
     
     NSString *dbPathString = [RS_Database getStudentDBFileName];
@@ -53,13 +53,15 @@
             if (retVal != SQLITE_OK)
                 //execute the sql statement
             {
-                [self showError:sqlite3_errmsg(studentDB)];
+//                [self showError:sqlite3_errmsg(studentDB)];
+                NSLog(@"Exec error = %s", sqlite3_errmsg(studentDB));
             }
             
         }
         else
         {
-            [self showError:sqlite3_errmsg(studentDB)];
+//            [self showError:sqlite3_errmsg(studentDB)];
+            NSLog(@"Open error = %s", sqlite3_errmsg(studentDB));
             
         }
         sqlite3_close(studentDB);
@@ -83,6 +85,8 @@
 }
 +(int) getNumberOfEntriesFromDB:(NSString *) period
 {
+//    NSLog(@"insertReal - Period == %@ ", period);
+
     NSString * dbPathString = [RS_Database getStudentDBFileName];
     sqlite3_stmt *statement ;
     sqlite3 *studentDB;
@@ -96,7 +100,8 @@
         }
         else
         {
-            querySQL = [NSString stringWithFormat:@"SELECT COUNT(*) FROM STUDENTS WHERE PERIOD = %@", period];
+            querySQL = [NSString stringWithFormat:@"SELECT COUNT(*) FROM STUDENTS WHERE PERIOD = '%@'", period];
+//            querySQL = [NSString stringWithFormat:@"SELECT COUNT(*) FROM STUDENTS WHERE PERIOD = 11"];
         }
         
         //		NSString *querySQL = [NSString stringWithFormat:@"SELECT COUNT(*) FROM STUDENTS WHERE PERIOD = 11"];
@@ -230,15 +235,59 @@
     }
     
 }
++(void) insertRealValuesIntoDB:(NSString *)period withArray:(NSMutableArray *)arr
+{
+    
+    NSMutableArray *myArr =
+        [NSMutableArray arrayWithArray:arr];
+    
+    sqlite3 *studentDB;
+    
+    int numberOfEntries = [RS_Database getNumberOfEntriesFromDB:period ];
+    
+    if (numberOfEntries == 0)
+    {
+        NSString * dbPathString = [RS_Database getStudentDBFileName];
+        if (sqlite3_open([dbPathString UTF8String], &studentDB)==SQLITE_OK)
+        {
+            NSUInteger i, count = [myArr count];
+            for (i = 0; i < count; i+=2)
+            {
+                NSString *fullName = [NSString stringWithFormat:@"%@ %@", [myArr objectAtIndex:i], [myArr objectAtIndex:i+1]];
+                NSString *insertStmt =
+                [NSString stringWithFormat:@"INSERT INTO STUDENTS (NAME,PERIOD) VALUES ('%s','%@')",
+                 [fullName UTF8String], period] ;
+                const char *insert_stmt = [insertStmt UTF8String];
+//                NSLog(@"Attempting to add Person %@ and Period %@ to DB", fullName, period);
+                char *error = nil;
+                if (sqlite3_exec(studentDB, insert_stmt, NULL, NULL, &error) != SQLITE_OK)
+                {
+                    NSLog(@"Error - InsertTestValues - %s", sqlite3_errmsg(studentDB));
+                }
+                
+            }
+            sqlite3_close(studentDB);
+        }
+        else
+        {
+            NSLog(@"Database Didnt Open! Error == %s", sqlite3_errmsg(studentDB));
+        }
+        
+    }
+    
+}
 
 +(void)showError:(const char *) errorMessage
 {
 
+    NSLog(@"Error == %s", errorMessage);
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"DatabaseError" message:[NSString stringWithFormat:@"%s", errorMessage] preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * action) {}];
+                                                          handler:^(UIAlertAction * action)
+    {         [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
     
     id rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
 

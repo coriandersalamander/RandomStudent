@@ -26,26 +26,40 @@
     [self showSetupScreen];
     
 }
+
+#pragma UIPickerViewDataSource required methods
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+// returns the # of rows in each component..
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return self.arrayOfPerson.count;
+}
+
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     
     return [self.arrayOfPerson objectAtIndex:row];
 }
 
+// User presses User Preferences
 - (void)showSetupScreen
 {
-    NSLog(@"I'm here!!!");
     SetupViewController *controller = [[SetupViewController alloc] initWithNibName:@"SetupViewController" bundle:nil];
-    //	controller.period = self.period;
     controller.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     controller.delegate = self;
     
-    //	[self presentModalViewController:controller animated:YES];
     [self presentViewController:controller animated:YES completion:nil];
 }
 
+// Setup View's Save Info was pressed.
 -(void) SetupViewControllerDidFinish:(SetupViewController *) controller
 {
+    [RS_Database createStudentDBTable];
+
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *tempPeriod = [userDefaults objectForKey:KEY_PERIOD];
     if ([tempPeriod isEqualToString:@""])
@@ -57,16 +71,71 @@
         self.periodLabel.text = [NSString stringWithFormat:@"Period %@", tempPeriod];
     }
     
-    [RS_Database createStudentDBTable];
     if ([RS_Database getNumberOfEntriesFromDB] == 0)
     {
         [RS_Database insertTestValuesIntoDB];
     }
     [self loadValuesIntoArray];
+    [self.studentPicker reloadAllComponents];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+
+
+-(void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+   
+/*
+ BOOL returningUser = [userDefaults boolForKey:KEY_RETURNINGUSER];
+    //	returningUser = NO;
+    NSLog(@"In ViewDidAppear!");
+    NSLog(@"Returning user == %i", returningUser);
+    if (returningUser == NO)
+    {
+        //		self.firstTimeUser = YES;
+        [self showSetupScreen];
+    }
+    else
+    {
+        
+        //		self.formatStyle = @"FirstNameFirst";
+        //	self.formatStyle = @"LastNameFirst";
+ 
+        if (arrayOfPerson.count == 0)
+        {
+            [self.chooseButton setOpaque:YES];
+            [self.chooseButton setEnabled:NO];
+            [self.chooseButton setTitle:@"No More Students!" forState: UIControlStateNormal];
+        }
+        else
+        {
+            [self.chooseButton setOpaque:NO];
+            [self.chooseButton setEnabled:YES];
+            [self.chooseButton setTitle:@"Choose Random" forState: UIControlStateNormal];
+        }
+        
+        
+    }
+ */
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *tempPeriod = [userDefaults objectForKey:KEY_PERIOD];
+    if ([tempPeriod isEqualToString:@""])
+    {
+        self.periodLabel.text = @"Entire Roster - No Period Selected";
+    }
+    else
+    {
+        self.periodLabel.text = [NSString stringWithFormat:@"Period %@", tempPeriod];
+    }
+    
+    [self loadValuesIntoArray];
+    [self.studentPicker reloadAllComponents];
+    
+    
+
+}
 - (void)displayAll
 {
     sqlite3_stmt *statement ;
@@ -89,19 +158,22 @@
             while (sqlite3_step(statement)== SQLITE_ROW)
             {
                 NSString *name = [[NSString alloc]initWithUTF8String:(const char *)sqlite3_column_text(statement, 1)];
-                [self.arrayOfPerson addObject:name];
+                NSString *period = [[NSString alloc]initWithUTF8String:(const char *)sqlite3_column_text(statement, 2)];
+                
+                NSLog(@"Entry == %@ - Period == %@", name, period);
+//                [self.arrayOfPerson addObject:name];
                 
             }
         }
     }
     
     //    [[self myTableView]reloadData];
-    [self.studentPicker reloadAllComponents];
+//    [self.studentPicker reloadAllComponents];
 }
 
 -(void) loadValuesIntoArray
 {
-    NSLog(@"In loadValuesIntoArray");
+//    NSLog(@"In loadValuesIntoArray");
     NSString * dbPathString = [RS_Database getStudentDBFileName];
     [self.arrayOfPerson removeAllObjects];
     
@@ -130,6 +202,7 @@
         }
         else
         {
+            
             NSRange substringRange = [self.periodLabel.text rangeOfString:@" "];
             NSString *periodNumber = [self.periodLabel.text substringFromIndex:substringRange.location + 1];
             
@@ -137,22 +210,15 @@
             
         }
         
-        NSLog(@"Query SQL = %@", querySQL);
+//        NSLog(@"Query SQL Before = %@", querySQL);
         const char *query_sql = [querySQL UTF8String];
+//        NSLog(@"Query SQL After = %s", query_sql);
         if (sqlite3_prepare_v2(studentDB, query_sql, -1, &statement, NULL) == SQLITE_OK)
         {
             while (sqlite3_step(statement) == SQLITE_ROW)
             {
                 NSString *fullName = [[NSString alloc]initWithUTF8String:(const char *)sqlite3_column_text(statement, 1)] ;
-                //				NSRange substringRange = [fullName rangeOfString:@" "];
-                
-                //				NSString *firstName = [fullName substringToIndex:substringRange.location];
-                //				NSLog(@"First name == %@", firstName);
                 [self.arrayOfPerson addObject:fullName];
-                //				NSString *lastName = [fullName substringFromIndex:substringRange.location + 1];
-                //				NSLog(@"Last name == %@", lastName);
-                
-                
             }
             if ((sqlite3_finalize(statement)) != SQLITE_OK)
             {
@@ -244,7 +310,8 @@
     {
         [RS_Database insertTestValuesIntoDB];
     }
-    [self loadValuesIntoArray];
+//    [self displayAll];
+    [self.studentPicker reloadAllComponents];
     
 }
 
@@ -252,18 +319,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma UIPickerViewDataSource required methods
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
-
-// returns the # of rows in each component..
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return self.arrayOfPerson.count;
 }
 
 
