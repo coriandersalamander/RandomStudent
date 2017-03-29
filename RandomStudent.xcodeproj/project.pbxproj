@@ -265,16 +265,18 @@
 				TargetAttributes = {
 					CB1E526C1E6ED67000E7939A = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 74H383AMWA;
+						DevelopmentTeam = KCE9W8MGEV;
 						ProvisioningStyle = Automatic;
 					};
 					CB1E52851E6ED67100E7939A = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = KCE9W8MGEV;
 						ProvisioningStyle = Automatic;
 						TestTargetID = CB1E526C1E6ED67000E7939A;
 					};
 					CB1E52901E6ED67100E7939A = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = KCE9W8MGEV;
 						ProvisioningStyle = Automatic;
 						TestTargetID = CB1E526C1E6ED67000E7939A;
 					};
@@ -468,6 +470,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = KCE9W8MGEV;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -516,6 +519,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = KCE9W8MGEV;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -542,12 +546,13 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 74H383AMWA;
+				DEVELOPMENT_TEAM = KCE9W8MGEV;
 				INFOPLIST_FILE = RandomStudent/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.lapharcius.RandomStudent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lapharcius;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
 			};
 			name = Debug;
 		};
@@ -558,12 +563,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 74H383AMWA;
+				DEVELOPMENT_TEAM = KCE9W8MGEV;
 				INFOPLIST_FILE = RandomStudent/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.lapharcius.RandomStudent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lapharcius;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
 			};
 			name = Release;
 		};

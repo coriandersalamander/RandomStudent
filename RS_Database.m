@@ -123,16 +123,16 @@
             {
                 NSLog(@"SQL finalize error == %s", sqlite3_errmsg(studentDB));
             }
-            
         }
         else
         {
             NSLog(@"Prep didn't work! Error == %s", sqlite3_errmsg(studentDB));
         }
+        sqlite3_close(studentDB);
     }
     else
     {
-        NSLog(@"Database Didnt Open! Error == %s", sqlite3_errmsg(studentDB));
+        NSLog(@"getNumberOfEntriesFromDB - Database Didnt Open! Error == %s", sqlite3_errmsg(studentDB));
     }
     return numberOfEntries;
 }
@@ -152,7 +152,7 @@
      @"Nigel", @"Tufnel",
      @"David", @"St. Hubbins",
      @"Derek", @"Smalls",
-     @"A", @"B",
+/*     @"A", @"B",
      @"C", @"D",
      @"E", @"F",
      @"G", @"H",
@@ -165,7 +165,7 @@
      @"U", @"V",
      @"W", @"X",
      @"Y", @"Z",
-     nil];
+*/     nil];
     
     sqlite3 *studentDB;
     
@@ -258,7 +258,7 @@
                 [NSString stringWithFormat:@"INSERT INTO STUDENTS (NAME,PERIOD) VALUES ('%s','%@')",
                  [fullName UTF8String], period] ;
                 const char *insert_stmt = [insertStmt UTF8String];
-//                NSLog(@"Attempting to add Person %@ and Period %@ to DB", fullName, period);
+                NSLog(@"Attempting to add Person %@ and Period %@ to DB", fullName, period);
                 char *error = nil;
                 if (sqlite3_exec(studentDB, insert_stmt, NULL, NULL, &error) != SQLITE_OK)
                 {

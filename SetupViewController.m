@@ -20,6 +20,7 @@
 
 #import "sqlite3.h"
 
+#define KEY_PERIOD_ARRAY @"Key_Period_Array"
 
 @interface SetupViewController ()<OIDAuthStateChangeDelegate,
 OIDAuthStateErrorDelegate>
@@ -67,33 +68,44 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
 @implementation SetupViewController
 @synthesize delegate;
 @synthesize fileNameField;
-@synthesize userNameField;
-@synthesize periodField;
-@synthesize scrollView;
 
-#pragma mark UITextField optional methods
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
+#pragma mark UITextView optional methods
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    
+    NSLog(@"Hi change stuff" );
+    if([text isEqualToString:@"\n"]) {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    
+    return YES;
+}
+-(BOOL) textViewShouldEndEditing:(UITextView *)textView
+/*
+ - (BOOL)textViewShouldReturn:(UITextView *)textView
+*/
 {
-    [textField resignFirstResponder];
+    NSLog(@"Hi");
+    [textView resignFirstResponder];
     return YES;
     
 }
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    NSLog(@"HIHIHIH");
-//    [textField becomeFirstResponder];
+    NSLog(@"Hi =- Sholw begin");
+    textView.text = @"";
     return YES;
 }
 
--(void) textFieldDidBeginEditing:(UITextField *)textField
+-(void) textViewDidBeginEditing:(UITextView *)textView
 {
-    NSLog(@"MNMNMN");
-//    [textField becomeFirstResponder];
+    NSLog(@"Hi =- Sholw end");
+//    [textView becomeFirstResponder];
 }
 
 
--(void) textFieldDidEndEditing:(UITextField *)textField
+-(void) textViewDidEndEditing:(UITextView *)textView
 {
     
 }
@@ -113,9 +125,8 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     NSString *tempString =  [self.arrayOfFiles objectAtIndex:row];
-    NSRange substringRange = [tempString rangeOfString:@" - ID="];
+    NSRange substringRange = [tempString rangeOfString:@" ID:"];
     NSString *title = [tempString substringToIndex:substringRange.location];
-    
     return title;
 }
 
@@ -126,7 +137,12 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
     
     self.arrayOfFiles = [[NSMutableArray alloc] init];
     self.arrayOfStudents = [[NSMutableArray alloc] init];
+    self.arrayOfPeriods = [[NSMutableArray alloc] init];
     
+    self.filenamePicker.layer.cornerRadius = 10;
+    self.filenamePicker.layer.borderWidth = 2;
+    self.filenamePicker.layer.borderColor = [UIColor lightGrayColor].CGColor;
+
     
 #if !defined(NS_BLOCK_ASSERTIONS)
 //    NSLog(@"is Equal? %i", [kClientID isEqualToString:@"82296042172-s23hcibpj3mi7bvnhelp1bq0qq80cqb0.apps.googleusercontent.com"]);
@@ -168,7 +184,7 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
     
     [self loadState];
     [self updateUI];
-    [self.fileWithPeriod reloadAllComponents];
+//    [self.fileWithPeriod reloadAllComponents];
     
     self.googleAuthFrame.layer.borderColor = [UIColor colorWithRed:.8 green:0 blue:0 alpha:1.0].CGColor;
     self.googleAuthFrame.layer.borderWidth = 1.0f;
@@ -181,88 +197,153 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
 
     self.resetButton.layer.borderWidth = 2;
     self.saveButton.layer.borderWidth = 2;
-    self.userinfoButton.layer.borderWidth = 2;
-//    self.googleFrame.
-}
-
--(void) viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:YES];
-    [self.fileWithPeriod reloadAllComponents];
+    self.viewFilesButton.layer.borderWidth = 2;
+    
+//    [self.filenamePicker ]
+//    self.filenamePicker.layoutMarginsGuide.bottomAnchor = 0;
     
 }
 
--(IBAction) resetDatabase:(id) sender
+
+-(void) loadPeriodsArrayFromPicker
 {
+ 
+    [self.arrayOfPeriods removeAllObjects];
     
-    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSInteger selectedRow = [self.filenamePicker selectedRowInComponent:0];
+    NSString *tempString =  [self.arrayOfFiles objectAtIndex:selectedRow];
+    NSLog(@"Spreadsheet ID == %@", tempString);
+    NSRange substringRange = [tempString rangeOfString:@" ID:"];
+    self.spreadsheetID = [tempString substringFromIndex:substringRange.location + 4];
+    NSLog(@"Spreadsheet ID == %@", self.spreadsheetID);
     
-    NSString *docPath = [path objectAtIndex:0];
-    NSString *dbPathString = [docPath stringByAppendingPathComponent:@"Students.db"];
+    //        GTLRDriveService *driveService = self.driveService;
+    GTLRSheetsService *sheetsService = self.sheetsService;
     
+    //        GTLRDriveQuery_FilesList *query = [GTLRDriveQuery_FilesList query];
+    GTLRSheetsQuery_SpreadsheetsGet *sheetsQuery = [GTLRSheetsQuery_SpreadsheetsGet queryWithSpreadsheetId:self.spreadsheetID];
+    sheetsQuery.includeGridData = NO;
+    //        [sheetsService executeQuery:sheetsQuery delegate:self didFinishSelector:@selector(    displayResultWithTicket:finishedWithObject:error:)];
+    [sheetsService executeQuery:sheetsQuery completionHandler:^(GTLRServiceTicket *callbackTicket,
+                                                                GTLRSheets_Spreadsheet *result,
+                                                                NSError *error)
+     {
+         if (error == nil)
+         {
+             NSArray *sheets = result.sheets;
+             for (GTLRSheets_Sheet *row in sheets)
+             {
+                 [self.arrayOfPeriods addObject:row.properties.title];
+                 //                     NSLog(@"Period == %@", row.properties.title);
+                 
+             }
+             
+         }
+         else
+         {
+             NSMutableString *message = [[NSMutableString alloc] init];
+             [message appendFormat:@"Error finding Google Sheet tabs: %@\n", error.localizedDescription];
+         }
+
+         [self loadStudentsArray];
+         
+
+     }];
+}
+
+-(void) loadStudentsArray
+{
+
+    for (NSString *tempPeriod in self.arrayOfPeriods) {
+        NSString *range = [NSString stringWithFormat:@"%@!A2:B", tempPeriod];
+        GTLRSheetsService *sheetsService = self.sheetsService;
+        GTLRSheetsQuery_SpreadsheetsValuesGet *query =
+        [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:self.spreadsheetID range:range];
     
-    sqlite3 * studentDB;
-    
-    if (sqlite3_open([dbPathString UTF8String] , &studentDB) == SQLITE_OK)
-    {
-        NSString *deleteStmt = [NSString stringWithFormat:@"DELETE FROM STUDENTS WHERE 1"];
-        const char *delete_stmt = [deleteStmt UTF8String];
-        NSLog(@"Deleting all entries");
-        char *error = nil;
-        if (sqlite3_exec(studentDB, delete_stmt, NULL, NULL, &error) == SQLITE_OK)
-        {
-            [self showAlert:@"Database Message" message:@"All entries deleted!"];
-        }
-        else
-        {
-            [self showAlert:@"Database Message" message:@"Error resetting database - See log for details"];
-            [self logMessage:@"Error attempting to reset database - %s", sqlite3_errmsg(studentDB)];
-        }
-        
+        [sheetsService executeQuery:query
+                  completionHandler:^(GTLRServiceTicket *callbackTicket,
+                                      GTLRSheets_ValueRange *result,
+                                      NSError *error)
+         {
+             [self.arrayOfStudents removeAllObjects];
+             if (error == nil)
+             {
+                 NSArray *rows = result.values;
+                 if (rows.count > 0)
+                 {
+//                     NSArray *row = [rows objectAtIndex:0];
+                     
+                     for (NSArray *row in rows)
+                     {
+                         NSString *fullName = [NSString stringWithFormat:@"%@, %@ PER:%@", row[0], row[1], tempPeriod];
+                         [self.arrayOfStudents addObject:fullName];
+                     }
+                 }
+             }
+             else
+             {
+                 NSMutableString *message = [[NSMutableString alloc] init];
+                 [message appendFormat:@"Error getting sheet data: %@\n", error.localizedDescription];
+                 NSLog(@"Error getting sheet data %@", error.localizedDescription);
+             }
+         
+             [self addStudentsToDB];
+         }];
         
     }
     
-    sqlite3_close(studentDB);
-    [self.arrayOfStudents removeAllObjects];
+    
+}
+
+
+//-(void) addArrayOfStudents:(NSSet *)objects
+-(void) addStudentsToDB{
+//    NSLog(@"In addStudents -- %lu", self.arrayOfStudents.count);
+    for (NSString *iter in self.arrayOfStudents)
+    {
+        NSRange substringRange = [iter rangeOfString:@" PER:"];
+        NSString *curStudent = [iter substringToIndex:substringRange.location];
+        NSString *periodNumber = [iter substringFromIndex:substringRange.location + 5];
+        sqlite3 *studentDB;
+        NSString * dbPathString = [RS_Database getStudentDBFileName];
+        if (sqlite3_open([dbPathString UTF8String], &studentDB)==SQLITE_OK)
+        {
+            NSString *insertStmt =
+            [NSString stringWithFormat:@"INSERT INTO STUDENTS (NAME,PERIOD) VALUES ('%s','%s')",
+                [curStudent UTF8String], [periodNumber UTF8String]] ;
+            const char *insert_stmt = [insertStmt UTF8String];
+            NSLog(@"Attempting to add Person %@ and Period %@ to DB", curStudent, periodNumber);
+            char *error = nil;
+            if (sqlite3_exec(studentDB, insert_stmt, NULL, NULL, &error) != SQLITE_OK)
+            {
+                NSLog(@"Error - InsertValues - %s", sqlite3_errmsg(studentDB));
+            }
+            sqlite3_close(studentDB);
+        }
+    }
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    [userDefaults setObject:@"" forKey:KEY_PERIOD ];
-    [userDefaults synchronize];
+    [userDefaults setObject:self.arrayOfPeriods forKey:KEY_PERIOD_ARRAY];
 
-    
+    [self.delegate SetupViewControllerDidFinish:self withPeriods:self.arrayOfPeriods];
+
 }
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc. that aren't in use.
-}
-
-
-
-
 
 -(IBAction) saveInfo:(id) sender
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    if (self.arrayOfFiles.count == 0 && (![[userDefaults objectForKey:KEY_PERIOD] isEqualToString:@""]))
-    {
-        // Do nothing. All the user did was to click the User Preferences button.
-        
-    }
-    else if (self.arrayOfFiles.count == 0)
+    if (self.arrayOfFiles.count == 0)
     {
         NSLog(@"Nil!");
-        [userDefaults setObject:@"" forKey:KEY_PERIOD];
+        [self.delegate SetupViewControllerDidFinish:self withPeriods:self.arrayOfPeriods];
+//        [userDefaults setObject:@"" forKey:KEY_PERIOD];
     }
     else
     {
-        [userDefaults setObject:self.userNameField.text forKey:KEY_USER];
+/*        [userDefaults setObject:self.userNameField.text forKey:KEY_USER];
         [userDefaults setObject:self.fileNameField.text forKey:KEY_FILENAME];
         //    NSString *tempPeriod = [NSString stringWithString:self.periodField.text];
-        NSInteger selectedRow = [self.fileWithPeriod selectedRowInComponent:0];
+        NSInteger selectedRow = [self.filenamePicker selectedRowInComponent:0];
         
         NSString *tempString = [self.arrayOfFiles objectAtIndex:selectedRow ];
         NSRange substringRange = [tempString rangeOfString:@" - "];
@@ -271,117 +352,49 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
         [userDefaults setObject:periodNumber forKey:KEY_PERIOD];
         NSString *restOfString = [tempString substringFromIndex:substringRange.location + 1];
         substringRange = [restOfString rangeOfString:@" - ID="];
-        NSString *spreadsheetID = [restOfString substringFromIndex:substringRange.location + 6];
+//        NSString *spreadsheetID = [restOfString substringFromIndex:substringRange.location + 6];
         
-        NSString *range = [NSString stringWithFormat:@"%@!A2:B", periodNumber];
-        GTLRSheetsService *sheetsService = self.sheetsService;
-        GTLRSheetsQuery_SpreadsheetsValuesGet *query =
-            [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:spreadsheetID range:range];
+*/
 
-        [sheetsService executeQuery:query
-                 completionHandler:^(GTLRServiceTicket *callbackTicket,
-                                     GTLRSheets_ValueRange *result,
-                                     NSError *error)
+        NSLog(@"Number of entries == %i", [RS_Database getNumberOfEntriesFromDB]);
+        int numberOfEntries = [RS_Database getNumberOfEntriesFromDB];
+        if (numberOfEntries == 0 || (numberOfEntries == [RS_Database getNumberOfEntriesFromDB:@"100"]))
         {
-            if (error == nil)
-            {
-                NSArray *rows = result.values;
-                if (rows.count > 0) {
-                    for (NSArray *row in rows) {
-                        // Print columns A and B, which correspond to indices 0 and 4.
-//                        [self.arrayOfStudents addObject:[NSString stringWithFormat:@"%@ %@", row[0], row[1]]];
-                        [self.arrayOfStudents addObject:row[0]];
-                        [self.arrayOfStudents addObject:row[1]];
-    //                        [self.arrayOfStudents addObject:[NSString stringWithFormat:@"%@ %@", row[0], row[1]]];
-                    }
-                } else {
-                    NSLog(@"No data found.");
-                }
-            } else {
-                NSMutableString *message = [[NSMutableString alloc] init];
-                [message appendFormat:@"Error getting sheet data: %@\n", error.localizedDescription];
-                NSLog(@"Error getting sheet data %@", error.localizedDescription);
-            }
+            [self removeTestEntries];
+            [self loadPeriodsArrayFromPicker];
+        }
+        else
+        {
+            [self.delegate SetupViewControllerDidFinish:self withPeriods:self.arrayOfPeriods];
+
+        }
         
-         [RS_Database insertRealValuesIntoDB:periodNumber withArray:self.arrayOfStudents];
-        }];
-         
+ //       [self loadStudentsArray];
+        
+//        [self addStudentsToDB];
+        
+        
+//        [sheetsService executeQuery:sheetsQuery
+//                           delegate:self
+//                  didFinishSelector:@selector(displayResultWithTicket:finishedWithObject:error:)];
+        
+        //        query.fields = @"kind,nextPageToken,files(mimeType,id,kind,name,webViewLink,thumbnailLink,trashed)";
+        
+        
+        
+
+//        [self.delegate SetupViewControllerDidFinish:self withPeriods:self.arrayOfPeriods];
+        
     }
 
     [userDefaults setBool:YES forKey:KEY_RETURNINGUSER];
     [userDefaults synchronize];
     
-    [self.delegate SetupViewControllerDidFinish:self];
 
 }
 
 
-/*! @brief Saves the @c GTMAppAuthFetcherAuthorization to @c NSUSerDefaults.
- */
-- (void)saveState {
-    if (_authorization.canAuthorize) {
-        [GTMAppAuthFetcherAuthorization saveAuthorization:_authorization
-                                        toKeychainForName:kExampleAuthorizerKey];
-    } else {
-        [GTMAppAuthFetcherAuthorization removeAuthorizationFromKeychainForName:kExampleAuthorizerKey];
-    }
-}
-
-/*! @brief Loads the @c GTMAppAuthFetcherAuthorization from @c NSUSerDefaults.
- */
-- (void)loadState {
-    GTMAppAuthFetcherAuthorization* authorization =
-    [GTMAppAuthFetcherAuthorization authorizationFromKeychainForName:kExampleAuthorizerKey];
-    [self setGtmAuthorization:authorization];
-}
-
-- (void)setGtmAuthorization:(GTMAppAuthFetcherAuthorization*)authorization {
-//    NSLog(@"Authorization == %@", authorization);
-    if ([_authorization isEqual:authorization]) {
-        return;
-    }
-    _authorization = authorization;
-    self.driveService.authorizer = authorization;
-    self.sheetsService.authorizer = authorization;
-    [self stateChanged];
-}
-
-/*! @brief Refreshes UI, typically called after the auth state changed.
- */
-- (void)updateUI {
-//    _userinfoButton.opaque = !_authorization.canAuthorize;
-//    _clearAuthStateButton.opaque = !_authorization.canAuthorize;
-    
-    _userinfoButton.enabled = _authorization.canAuthorize;
-    _clearAuthStateButton.enabled = _authorization.canAuthorize;
-    // dynamically changes authorize button text depending on authorized state
-    if (!_authorization.canAuthorize) {
-        [_authAutoButton setTitle:@"Authorize" forState:UIControlStateNormal];
-        [_authAutoButton setTitle:@"Authorize" forState:UIControlStateHighlighted];
-        self.userinfoButton.alpha = .25;
-        self.clearAuthStateButton.alpha = .25;
-    } else {
-        [_authAutoButton setTitle:@"Re-authorize" forState:UIControlStateNormal];
-        [_authAutoButton setTitle:@"Re-authorize" forState:UIControlStateHighlighted];
-        self.userinfoButton.alpha = 1.0;
-        self.clearAuthStateButton.alpha = 1.0;
-    }
-}
-
-- (void)stateChanged {
-    [self saveState];
-    [self updateUI];
-}
-
-- (void)didChangeState:(OIDAuthState *)state {
-    [self stateChanged];
-}
-
-- (void)authState:(OIDAuthState *)state didEncounterAuthorizationError:(NSError *)error {
-    [self logMessage:@"Received authorization error: %@", error];
-}
-
-- (IBAction)authWithAutoCodeExchange:(nullable id)sender {
+- (IBAction)authenticate:(id)sender {
     NSURL *issuer = [NSURL URLWithString:kIssuer];
     NSURL *redirectURI = [NSURL URLWithString:kRedirectURI];
     
@@ -436,7 +449,7 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
     
 }
 
-- (IBAction)clearAuthState:(nullable id)sender {
+- (IBAction)logout:(id)sender {
     [self setGtmAuthorization:nil];
 }
 
@@ -444,16 +457,13 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
     _logTextView.text = @"";
 }
 
-- (IBAction)userinfo:(nullable id)sender {
+- (IBAction)viewFiles:(nullable id)sender {
     
     [self.arrayOfFiles removeAllObjects];
 
     GTLRDriveService *driveService = self.driveService;
-    GTLRSheetsService *sheetsService = self.sheetsService;
-    
     GTLRDriveQuery_FilesList *query = [GTLRDriveQuery_FilesList query];
         
-//        query.fields = @"kind,nextPageToken,files(mimeType,id,kind,name,webViewLink,thumbnailLink,trashed)";
     query.fields = @"kind,nextPageToken,files(id,name,kind)";
     if ([self.fileNameField.text isEqualToString:@""] || [self.fileNameField.text isEqualToString:@"Filter by Filename"] )
     {
@@ -477,18 +487,17 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
             {
                 for (GTLRDrive_File *item in fileList)
                 {
- //                   [self logMessage:@"Item: %@ (%@) . MIME Type == %@", item.name, item.kind, item.identifier];
-                    NSString *spreadsheetId = item.identifier;
-                    GTLRSheetsQuery_SpreadsheetsGet *sheetsQuery = [GTLRSheetsQuery_SpreadsheetsGet queryWithSpreadsheetId:spreadsheetId];
-                    sheetsQuery.includeGridData = NO;
-                        
-                    [sheetsService executeQuery:sheetsQuery
-                                        delegate:self
-                                didFinishSelector:@selector(displayResultWithTicket:finishedWithObject:error:)];
+                    [self.arrayOfFiles addObject:[NSString stringWithFormat:@"%@ ID:%@", item.name, item.identifier]];
+                    
+//                    [self logMessage:@"Item: %@ (%@) . MIME Type == %@", item.name, item.kind, item.identifier];
   
                     }
                 }
-            }];
+            [self.filenamePicker reloadAllComponents];
+
+            }
+     ];
+    
 }
 
 // Process the response and display output
@@ -501,9 +510,9 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
         NSArray *sheets = result.sheets;
         for (GTLRSheets_Sheet *row in sheets)
         {
-            [self.arrayOfFiles addObject:[NSString stringWithFormat:@"%@ - %@ - ID=%@", row.properties.title, result.properties.title, result.spreadsheetId]];
+            [self.arrayOfPeriods addObject:row.properties.title];
+            
         }
-    [self.fileWithPeriod reloadAllComponents];
 
     }
     else
@@ -512,6 +521,98 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
         [message appendFormat:@"Error getting sheet data: %@\n", error.localizedDescription];
     }
 }
+
+
+/* Stuff I rarely need to look at */
+
+-(void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    //    [self.fileWithPeriod reloadAllComponents];
+    
+}
+
+
+- (void)didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    
+    // Release any cached data, images, etc. that aren't in use.
+}
+
+
+-(void) removeTestEntries
+{
+    
+    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    
+    NSString *docPath = [path objectAtIndex:0];
+    NSString *dbPathString = [docPath stringByAppendingPathComponent:@"Students.db"];
+    
+    
+    sqlite3 * studentDB;
+    
+    if (sqlite3_open([dbPathString UTF8String] , &studentDB) == SQLITE_OK)
+    {
+        NSString *deleteStmt = [NSString stringWithFormat:@"DELETE FROM STUDENTS WHERE PERIOD = '100'"];
+        const char *delete_stmt = [deleteStmt UTF8String];
+        NSLog(@"Deleting all test entries");
+        char *error = nil;
+        if (sqlite3_exec(studentDB, delete_stmt, NULL, NULL, &error) != SQLITE_OK)
+        {
+            [self showAlert:@"Database Message" message:@"Error resetting database - See log for details"];
+            [self logMessage:@"Error attempting to reset database - %s", sqlite3_errmsg(studentDB)];
+        }
+        
+        
+    }
+    
+    sqlite3_close(studentDB);
+}
+
+-(IBAction) resetDatabase:(id) sender
+{
+    
+    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    
+    NSString *docPath = [path objectAtIndex:0];
+    NSString *dbPathString = [docPath stringByAppendingPathComponent:@"Students.db"];
+    
+    
+    sqlite3 * studentDB;
+    
+    if (sqlite3_open([dbPathString UTF8String] , &studentDB) == SQLITE_OK)
+    {
+        NSString *deleteStmt = [NSString stringWithFormat:@"DELETE FROM STUDENTS WHERE 1"];
+        const char *delete_stmt = [deleteStmt UTF8String];
+        NSLog(@"Deleting all entries");
+        char *error = nil;
+        if (sqlite3_exec(studentDB, delete_stmt, NULL, NULL, &error) == SQLITE_OK)
+        {
+            [self showAlert:@"Database Message" message:@"All entries deleted!"];
+        }
+        else
+        {
+            [self showAlert:@"Database Message" message:@"Error resetting database - See log for details"];
+            [self logMessage:@"Error attempting to reset database - %s", sqlite3_errmsg(studentDB)];
+        }
+        
+        
+    }
+    
+    sqlite3_close(studentDB);
+    [self.arrayOfStudents removeAllObjects];
+    [self.arrayOfPeriods removeAllObjects];
+    [self.arrayOfFiles removeAllObjects];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    [userDefaults setObject:@"" forKey:KEY_PERIOD ];
+    [userDefaults synchronize];
+    
+    
+}
+
+//-(UIPickerView *) pickerView
 
 - (GTLRDriveService *)driveService {
     static GTLRDriveService *service;
@@ -549,6 +650,73 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
     });
     return service;
 }
+
+/*! @brief Saves the @c GTMAppAuthFetcherAuthorization to @c NSUSerDefaults.
+ */
+- (void)saveState {
+    if (_authorization.canAuthorize) {
+        [GTMAppAuthFetcherAuthorization saveAuthorization:_authorization
+                                        toKeychainForName:kExampleAuthorizerKey];
+    } else {
+        [GTMAppAuthFetcherAuthorization removeAuthorizationFromKeychainForName:kExampleAuthorizerKey];
+    }
+}
+
+/*! @brief Loads the @c GTMAppAuthFetcherAuthorization from @c NSUSerDefaults.
+ */
+- (void)loadState {
+    GTMAppAuthFetcherAuthorization* authorization =
+    [GTMAppAuthFetcherAuthorization authorizationFromKeychainForName:kExampleAuthorizerKey];
+    [self setGtmAuthorization:authorization];
+}
+
+- (void)setGtmAuthorization:(GTMAppAuthFetcherAuthorization*)authorization {
+    //    NSLog(@"Authorization == %@", authorization);
+    if ([_authorization isEqual:authorization]) {
+        return;
+    }
+    _authorization = authorization;
+    self.driveService.authorizer = authorization;
+    self.sheetsService.authorizer = authorization;
+    [self stateChanged];
+}
+
+/*! @brief Refreshes UI, typically called after the auth state changed.
+ */
+- (void)updateUI {
+    //    _userinfoButton.opaque = !_authorization.canAuthorize;
+    //    _clearAuthStateButton.opaque = !_authorization.canAuthorize;
+    
+    self.viewFilesButton.enabled = _authorization.canAuthorize;
+    self.logoutButton.enabled = _authorization.canAuthorize;
+    // dynamically changes authorize button text depending on authorized state
+    if (!_authorization.canAuthorize) {
+        [self.loginButton setTitle:@"Authorize" forState:UIControlStateNormal];
+        [self.loginButton setTitle:@"Authorize" forState:UIControlStateHighlighted];
+        self.viewFilesButton.alpha = .25;
+        self.logoutButton.alpha = .25;
+    } else {
+        [self.loginButton setTitle:@"Re-authorize" forState:UIControlStateNormal];
+        [self.loginButton setTitle:@"Re-authorize" forState:UIControlStateHighlighted];
+        self.viewFilesButton.alpha = 1.0;
+        self.logoutButton.alpha = 1.0;
+    }
+}
+
+- (void)stateChanged {
+    [self saveState];
+    [self updateUI];
+}
+
+- (void)didChangeState:(OIDAuthState *)state {
+    [self stateChanged];
+}
+
+- (void)authState:(OIDAuthState *)state didEncounterAuthorizationError:(NSError *)error {
+    [self logMessage:@"Received authorization error: %@", error];
+}
+
+
 
 /*! @brief Logs a message to stdout and the textfield.
  @param format The format string and arguments.

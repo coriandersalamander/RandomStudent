@@ -24,33 +24,35 @@ UIViewController <  InfoViewProtocol,
 {
 }
 
+@property (retain, nonatomic) IBOutlet UILabel *periodLabel;
+@property (weak, nonatomic) IBOutlet UIButton *choosePeriodButton;
+
+@property (weak, nonatomic) IBOutlet UIPickerView *studentPicker;
+@property (strong, nonatomic) IBOutlet UIPickerView *periodsPicker;
+
 @property (weak, nonatomic) IBOutlet UIButton *randomButton;
 @property (weak, nonatomic) IBOutlet UIButton *userPrefButton;
-@property (weak, nonatomic) IBOutlet UIPickerView *studentPicker;
+@property (weak, nonatomic) IBOutlet UIButton *infoButton;
 
 @property NSMutableArray *arrayOfPerson;
-- (void)loadValuesIntoArray;
-
-
+@property NSMutableArray *arrayOfPeriods;
 @property (retain, nonatomic) NSTimer *randomTimer;
 
 @property (retain, nonatomic) NSString *period;
 
-@property (retain, nonatomic) NSString *userName;
-@property (retain, nonatomic) IBOutlet UILabel *periodLabel;
+- (void)loadValuesIntoArray;
 
 - (IBAction)showInfo:(id)sender;
+-(void) savePeriod:(id) object;
 - (void)showSetupScreen;
 
+- (IBAction)choosePeriod:(id)sender;
 - (void) logSelf;
 - (void) displayAll;
 
 
 - (IBAction) chooseRandom:(id) sender;
 - (IBAction) populate:(id) sender;
-
-
-
 
 @end
 
