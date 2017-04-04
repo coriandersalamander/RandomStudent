@@ -19,9 +19,12 @@
 		CB2A421E1E6F442D00A2DB71 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CB2A421D1E6F442D00A2DB71 /* libsqlite3.tbd */; };
 		CB2A42221E6F4ADA00A2DB71 /* SetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB2A42201E6F4ADA00A2DB71 /* SetupViewController.m */; };
 		CB48202F1E6EFE4100720452 /* RS_Database.m in Sources */ = {isa = PBXBuildFile; fileRef = CB48202E1E6EFE4100720452 /* RS_Database.m */; };
+		CB9C68481E923BB400F8870C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9C68471E923BB400F8870C /* icon.png */; };
+		CB9C684A1E923BC600F8870C /* goicon.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9C68491E923BC600F8870C /* goicon.png */; };
+		CB9C684C1E923BD500F8870C /* stopicon.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9C684B1E923BD500F8870C /* stopicon.png */; };
+		CB9C68571E925C6500F8870C /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = CB9C68551E925C6500F8870C /* iTunesArtwork */; };
+		CB9C68581E925C6500F8870C /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = CB9C68561E925C6500F8870C /* iTunesArtwork@2x */; };
 		CBC9FCDD1E70A2E9008BC5E7 /* SetupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBC9FCDC1E70A2E9008BC5E7 /* SetupViewController.xib */; };
-		CBC9FCDF1E70ACD8008BC5E7 /* icon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CBC9FCDE1E70ACD8008BC5E7 /* icon.jpg */; };
-		CBE57CFC1E88101100197239 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CBE57CFB1E88101100197239 /* icon.png */; };
 		CBF841A31E6F2DA80015011D /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBF841A11E6F2DA80015011D /* InfoViewController.m */; };
 		CBF841A41E6F2DA80015011D /* InfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBF841A21E6F2DA80015011D /* InfoViewController.xib */; };
 /* End PBXBuildFile section */
@@ -67,9 +70,12 @@
 		CB2A42201E6F4ADA00A2DB71 /* SetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetupViewController.m; sourceTree = "<group>"; };
 		CB48202D1E6EFE4100720452 /* RS_Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RS_Database.h; sourceTree = "<group>"; };
 		CB48202E1E6EFE4100720452 /* RS_Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RS_Database.m; sourceTree = "<group>"; };
+		CB9C68471E923BB400F8870C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = ../../../Icons/icon.png; sourceTree = "<group>"; };
+		CB9C68491E923BC600F8870C /* goicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = goicon.png; path = ../../../Icons/goicon.png; sourceTree = "<group>"; };
+		CB9C684B1E923BD500F8870C /* stopicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stopicon.png; path = ../../../Icons/stopicon.png; sourceTree = "<group>"; };
+		CB9C68551E925C6500F8870C /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = ../../../Icons/icon/ios/iTunesArtwork; sourceTree = "<group>"; };
+		CB9C68561E925C6500F8870C /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; name = "iTunesArtwork@2x"; path = "../../../Icons/icon/ios/iTunesArtwork@2x"; sourceTree = "<group>"; };
 		CBC9FCDC1E70A2E9008BC5E7 /* SetupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SetupViewController.xib; sourceTree = "<group>"; };
-		CBC9FCDE1E70ACD8008BC5E7 /* icon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = icon.jpg; path = ../../../icon.jpg; sourceTree = "<group>"; };
-		CBE57CFB1E88101100197239 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = ../../../icon.png; sourceTree = "<group>"; };
 		CBF841A01E6F2DA80015011D /* InfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoViewController.h; sourceTree = "<group>"; };
 		CBF841A11E6F2DA80015011D /* InfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoViewController.m; sourceTree = "<group>"; };
 		CBF841A21E6F2DA80015011D /* InfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoViewController.xib; sourceTree = "<group>"; };
@@ -145,8 +151,11 @@
 		CB1E526F1E6ED67000E7939A /* RandomStudent */ = {
 			isa = PBXGroup;
 			children = (
-				CBE57CFB1E88101100197239 /* icon.png */,
-				CBC9FCDE1E70ACD8008BC5E7 /* icon.jpg */,
+				CB9C68551E925C6500F8870C /* iTunesArtwork */,
+				CB9C68561E925C6500F8870C /* iTunesArtwork@2x */,
+				CB9C684B1E923BD500F8870C /* stopicon.png */,
+				CB9C68491E923BC600F8870C /* goicon.png */,
+				CB9C68471E923BB400F8870C /* icon.png */,
 				CB1E52731E6ED67000E7939A /* AppDelegate.h */,
 				CB1E52741E6ED67000E7939A /* AppDelegate.m */,
 				CB1E52761E6ED67000E7939A /* ViewController.h */,
@@ -307,12 +316,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB9C68581E925C6500F8870C /* iTunesArtwork@2x in Resources */,
 				CB1E52801E6ED67000E7939A /* LaunchScreen.storyboard in Resources */,
-				CBE57CFC1E88101100197239 /* icon.png in Resources */,
+				CB9C684C1E923BD500F8870C /* stopicon.png in Resources */,
 				CBC9FCDD1E70A2E9008BC5E7 /* SetupViewController.xib in Resources */,
 				CB1E527D1E6ED67000E7939A /* Assets.xcassets in Resources */,
+				CB9C68571E925C6500F8870C /* iTunesArtwork in Resources */,
 				CBF841A41E6F2DA80015011D /* InfoViewController.xib in Resources */,
-				CBC9FCDF1E70ACD8008BC5E7 /* icon.jpg in Resources */,
+				CB9C684A1E923BC600F8870C /* goicon.png in Resources */,
+				CB9C68481E923BB400F8870C /* icon.png in Resources */,
 				CB1E527B1E6ED67000E7939A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

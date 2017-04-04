@@ -72,7 +72,6 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
 #pragma mark UITextView optional methods
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     
-    NSLog(@"Hi change stuff" );
     if([text isEqualToString:@"\n"]) {
         [textView resignFirstResponder];
         return NO;
@@ -81,11 +80,7 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
     return YES;
 }
 -(BOOL) textViewShouldEndEditing:(UITextView *)textView
-/*
- - (BOOL)textViewShouldReturn:(UITextView *)textView
-*/
 {
-    NSLog(@"Hi");
     [textView resignFirstResponder];
     return YES;
     
@@ -93,17 +88,9 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    NSLog(@"Hi =- Sholw begin");
     textView.text = @"";
     return YES;
 }
-
--(void) textViewDidBeginEditing:(UITextView *)textView
-{
-    NSLog(@"Hi =- Sholw end");
-//    [textView becomeFirstResponder];
-}
-
 
 -(void) textViewDidEndEditing:(UITextView *)textView
 {
@@ -607,6 +594,7 @@ static NSString *const kExampleAuthorizerKey = @"authorization";
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     [userDefaults setObject:@"" forKey:KEY_PERIOD ];
+    [userDefaults setObject:nil forKey:KEY_PERIOD_ARRAY ];
     [userDefaults synchronize];
     
     

@@ -58,6 +58,45 @@
     }
 }
 
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(nullable UIView *)view __TVOS_PROHIBITED
+{
+ 
+    UILabel *pickerRowLabel = (UILabel *)view;
+    if (pickerRowLabel == nil)
+    {
+        // Rule 1: width and height match what the picker view expects.
+        //         Change as needed.
+//        NSLog(@"Bounds == %f", pickerView.bounds.size.height);
+//        CGRect frame = CGRectMake(0.0, 0.0, 320, 44); Again... Hardcoding is bad.
+        CGRect frame = CGRectMake(0.0, 0.0, pickerView.frame.size.width, pickerView.frame.size.height * .15);
+//        CGRect frame = CGRectMake(0.0, 0.0, pickerView.frame.size. );
+        pickerRowLabel = [[UILabel alloc] initWithFrame:frame];
+//        pickerRowLabel.layer.cornerRadius = pickerRowLabel.bounds.size.width / 2;
+        // Rule 2: background color is clear. The view is positioned over
+        //         the UIPickerView chrome.
+            pickerRowLabel.backgroundColor = [UIColor colorWithRed:0.0/255.0 green:31.0/255.0 blue:91.0/255.0 alpha:1.0];
+            pickerRowLabel.textColor = [UIColor colorWithRed:242.0/255.0 green:169.0/255.0 blue:0.0/255.0 alpha:1.0];
+        // Rule 3: view must capture all touches otherwise the cell will highlight,
+        //         because the picker view uses a UITableView in its implementation.
+        pickerRowLabel.userInteractionEnabled = YES;
+        pickerRowLabel.font = [UIFont fontWithName:@"Futura-Bold" size:17.0];
+        pickerRowLabel.textAlignment = NSTextAlignmentCenter;
+    }
+    if ([pickerView isEqual:self.studentPicker])
+    {
+        pickerRowLabel.text = [self.arrayOfPerson objectAtIndex:row];
+
+    }
+    else
+    {
+        pickerRowLabel.text = [self.arrayOfPeriods objectAtIndex:row];
+        
+    }
+    return pickerRowLabel;
+ 
+}
+
+
 // User presses User Preferences
 - (void)showSetupScreen
 {
@@ -172,20 +211,61 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+//    self.view.backgroundColor = [UIColor colorWithRed:0.08 green:0.69 blue:0.94 alpha:1.0]; //Petty Blue
+//    self.view.backgroundColor = [UIColor colorWithRed:0.0/255.0 green:71.0/255.0 blue:187.0/255.0 alpha:1.0]; //Adelphi Blue
+    self.view.backgroundColor = [UIColor colorWithRed:59.0/255.0 green:120.0/255.0 blue:250.0/255.0 alpha:1.0]; //Winner! Don't change this! 
     
-    self.randomButton.layer.cornerRadius = 10;
+    
+    self.randomButton.layer.cornerRadius = self.randomButton.bounds.size.width / 2;
+//    self.randomButton.layer.borderColor = [UIColor colorWithRed:0.00 green:0.00 blue:0.50 alpha:1.0].CGColor;
+//    self.randomButton.layer.borderWidth = 2;
     self.userPrefButton.layer.cornerRadius = 10;
+    self.userPrefButton.layer.borderColor = [UIColor colorWithRed:0.00 green:0.00 blue:0.50 alpha:1.0].CGColor;
+    self.userPrefButton.layer.borderWidth = 2;
+
     self.choosePeriodButton.layer.cornerRadius = 10;
+    self.choosePeriodButton.layer.borderColor = [UIColor colorWithRed:0.00 green:0.00 blue:0.50 alpha:1.0].CGColor;
+    self.choosePeriodButton.layer.borderWidth = 2;
     
-    self.studentPicker.layer.cornerRadius = 10;
+    /* Note to self... Hardcoding is bad. Use the width of the Picker to determine cornerRadius.
+    self.studentPicker.layer.cornerRadius = 135; // This is good for iPhone 5, but hard-coding is bad.
+    self.studentPicker.layer.cornerRadius = self.studentPicker.layer.bounds.size.width / 2; // This is far more flexible.
+     */
+    
+//    self.studentPicker.layer.frame.size.height = 162.0;
+    
+//    self.studentPicker.layer.cornerRadius = 15;
+    self.studentPicker.layer.masksToBounds = YES; // This value fixes a problem when running iOS 8.3 where the edges of the picker wheel's labels were peeking out into view, when they should have been hidden behind the picker itself.
+//    self.studentPicker.layer.cornerRadius = 40;
+    self.studentPicker.layer.cornerRadius = self.studentPicker.layer.frame.size.width / 2;
+    
+    NSLog(@"frame.size.width == %f", self.studentPicker.layer.frame.size.width);
+    NSLog(@"frame.size.height == %f", self.studentPicker.layer.frame.size.height);
+    NSLog(@"bounds.size.width == %f", self.studentPicker.layer.bounds.size.width);
+    NSLog(@"bounds.size.height == %f", self.studentPicker.layer.bounds.size.height);
+    
     self.studentPicker.layer.borderWidth = 2;
-    self.studentPicker.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.studentPicker.layer.borderColor = [UIColor colorWithRed:0/255 green:31.0/255.0 blue:91.0/255.0 alpha:1.0].CGColor;
+    
+    self.studentPicker.layer.backgroundColor = [UIColor colorWithRed:158.0/255.0 green:86.0/255.0 blue:235.0/255.0 alpha:0.7].CGColor; // this is really close Called "Light Cyan Blue"
+    
+    
+
+
+    //    self.studentPicker.layer.backgroundColor = [UIColor colorWithRed:131.0/255.0 green:120.0/255.0 blue:111.0/255.0 alpha:1.0].CGColor; // this is really close
+    
+//    self.studentPicker.layer.backgroundColor = [UIColor colorWithRed:80.0/255.0 green:145.0/255.0 blue:205.0/255.0 alpha:1.0].CGColor;
+    /* Experimenting here */
+    
+    /* End of experiments */
+     
     
     self.arrayOfPerson = [[NSMutableArray alloc] init];
     self.arrayOfPeriods = [[NSMutableArray alloc] init];
 
     self.infoButton.layer.cornerRadius = 10;
-    
+    self.infoButton.layer.borderColor = [UIColor colorWithRed:0.00 green:0.00 blue:0.50 alpha:1.0].CGColor;
+    self.infoButton.layer.borderWidth = 2;
     [RS_Database createStudentDBTable];
     if ([RS_Database getNumberOfEntriesFromDB] == 0)
     {
@@ -207,7 +287,7 @@
     }
     else
     {
-        self.periodLabel.text = [NSString stringWithFormat:@"Period %@", tempPeriod];
+        self.periodLabel.text = [NSString stringWithFormat:@"Period - %@", tempPeriod];
         self.period = tempPeriod;
     }
 
@@ -341,10 +421,12 @@
         [self.randomTimer invalidate];
         self.randomTimer = nil;
         [self.randomButton setTitle:@"Random!" forState:UIControlStateNormal];
+        [self.randomButton setImage:[UIImage imageNamed:@"goicon.png" ] forState:UIControlStateNormal];
     }
     else
     {
         [self.randomButton setTitle:@"Stop" forState:UIControlStateNormal];
+        [self.randomButton setImage:[UIImage imageNamed:@"stopicon.png" ] forState:UIControlStateNormal];
         self.randomTimer = [NSTimer scheduledTimerWithTimeInterval:.2 target:self selector:@selector(selectStudent:) userInfo:nil repeats:YES];
     }
     
