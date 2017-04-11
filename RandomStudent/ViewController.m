@@ -234,15 +234,36 @@
     
 //    self.studentPicker.layer.frame.size.height = 162.0;
     
-//    self.studentPicker.layer.cornerRadius = 15;
-    self.studentPicker.layer.masksToBounds = YES; // This value fixes a problem when running iOS 8.3 where the edges of the picker wheel's labels were peeking out into view, when they should have been hidden behind the picker itself.
-//    self.studentPicker.layer.cornerRadius = 40;
-    self.studentPicker.layer.cornerRadius = self.studentPicker.layer.frame.size.width / 2;
-    
-    NSLog(@"frame.size.width == %f", self.studentPicker.layer.frame.size.width);
+/*
+ NSLog(@"frame.size.width == %f", self.studentPicker.layer.frame.size.width);
     NSLog(@"frame.size.height == %f", self.studentPicker.layer.frame.size.height);
     NSLog(@"bounds.size.width == %f", self.studentPicker.layer.bounds.size.width);
     NSLog(@"bounds.size.height == %f", self.studentPicker.layer.bounds.size.height);
+ */
+    
+//    self.studentPicker.layer.cornerRadius = 15;
+    self.studentPicker.layer.masksToBounds = YES; // This value fixes a problem when running iOS 8.3 where the edges of the picker wheel's labels were peeking out into view, when they should have been hidden behind the picker itself.
+//    self.studentPicker.layer.cornerRadius = 40;
+    CGRect frame = self.studentPicker.frame;
+    frame.size.width = MIN(self.studentPicker.bounds.size.width, self.studentPicker.bounds.size.height);
+    frame.origin.x = frame.origin.x + (fabs(self.studentPicker.bounds.size.width - self.studentPicker.bounds.size.height)/2);
+//    frame.origin.y = self.view.center.y;
+    
+//    [self.studentPicker setCenter:CGPointMake(self.view.center.x, self.view.center.y)];
+    [self.studentPicker setFrame:frame];
+
+//    [self.studentPicker.center
+    self.studentPicker.layer.cornerRadius = self.studentPicker.layer.bounds.size.width / 2;
+//    self.studentPicker.set
+    
+    self.studentPicker.layer.needsDisplayOnBoundsChange = YES;
+    
+/*
+ NSLog(@"frame.size.width == %f", self.studentPicker.layer.frame.size.width);
+    NSLog(@"frame.size.height == %f", self.studentPicker.layer.frame.size.height);
+    NSLog(@"bounds.size.width == %f", self.studentPicker.layer.bounds.size.width);
+    NSLog(@"bounds.size.height == %f", self.studentPicker.layer.bounds.size.height);
+*/
     
     self.studentPicker.layer.borderWidth = 2;
     self.studentPicker.layer.borderColor = [UIColor colorWithRed:0/255 green:31.0/255.0 blue:91.0/255.0 alpha:1.0].CGColor;
